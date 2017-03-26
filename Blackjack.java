@@ -1,26 +1,37 @@
 import java.io.*;
+import java.util.Scanner;
 
 public class Blackjack {
 
   public static void playGame() {
 
-    Cards playerCards = new Cards();
+    Cards deckCards = new Cards();
 
-    String[] dealtCards = new String[10];
-    dealtCards[0] = playerCards.getCard(playerCards.faces);
-    dealtCards[1] = playerCards.getCard(playerCards.faces);
+    String[] playerCards = new String[10];
+    String[] dealerCards = new String[10];
 
-    System.out.println("Your first card is " + dealtCards[0]);
-    System.out.println("Your second card is " + dealtCards[1]);
-    if(getTotal(dealtCards) > 21){
-      System.out.println("You busted!");
-    };
+    playerCards[0] = deckCards.getCard(deckCards.faces);
+    System.out.println("Your first card is " + playerCards[0]);
 
+    String choice = "";
+    int cardIndex = 1;
+    while (!choice.equals("stay")){
+      playerCards[cardIndex] = deckCards.getCard(deckCards.faces);
+      System.out.println("Your next card is " + playerCards[cardIndex]);
+      if (getTotal(playerCards) > 21){
+        System.out.println("You busted!");
+        break;
+      }
+      System.out.println("Do you want to stay or hit?");
+      choice = getUserInput();
+      cardIndex += 1;
+    }
   }
+
 // take array and return total points
   public static int getTotal(String[] cards) {
     int total = 0;
-    for(String card : cards) {
+    for (String card : cards) {
       if (card != null) {
         try {
           total += Integer.parseInt(card);
@@ -36,6 +47,16 @@ public class Blackjack {
       }
     }
     return total;
+  }
+
+  public static String getUserInput() {
+    Scanner input = new Scanner(System.in);
+    String choice = input.next();
+    while (!choice.equals("stay") && !choice.equals("hit")) {
+      System.out.println("Sorry that is not an option. Enter stay or hit.");
+      choice = input.next();
+    }
+    return(choice);
   }
 
   public static void main(String args[]) {
